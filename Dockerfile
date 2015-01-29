@@ -1,16 +1,32 @@
 FROM ubuntu
 MAINTAINER Leif Johansson <leifj@sunet.se>
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 RUN apt-get update
-RUN apt-get install -y git-core libyaml-dev python-dev build-essential libz-dev python-virtualenv
+RUN apt-get install -y git-core libyaml-dev python-dev build-essential libz-dev python-virtualenv apache2 libapache2-mod-shib2 ssl-cert libapache2-mod-wsgi
+RUN a2enmod rewrite
+RUN a2enmod ssl
+RUN a2enmod shib2
+RUN a2enmod headers
+RUN a2enmod wsgi
 RUN virtualenv /usr/lobo2
 RUN mkdir -p /var/run/lobo2
 WORKDIR /var/run/lobo2
-ENV VENV /usr/pyff
-ENV BASE_URL http://localhost:8080
+ENV VENV /usr/lobo2
+RUN virtualenv /usr/lobo2
 ADD invenv.sh /invenv.sh
 RUN chmod a+x /invenv.sh
-ADD invenv.sh /start.sh
+ADD start.sh /start.sh
 RUN chmod a+x /start.sh
-RUN /invenv.sh pip install --upgrade git+git://github.com/leifj/lobo2.git#egg=lobo2
-EXPOSE 8080
+RUN /invenv.sh pip install --upgrade -r https://raw.githubusercontent.com/SUNET/lobo2/master/requirements.txt
+RUN /invenv.sh pip install --upgrade git+git://github.com/SUNET/lobo2.git#egg=lobo2
+RUN rm -f /etc/apache2/sites-available/*
+RUN rm -f /etc/apache2/sites-enabled/*
+ADD md-signer.crt /etc/shibboleth/md-signer.crt
+ADD attribute-map.xml /etc/shibboleth/attribute-map.xml
+ENV SP_HOSTNAME datasets.sunet.se
+ENV SP_CONTACT noc@sunet.se
+ENV SP_ABOUT /about
+ENV METADATA_SIGNER md-signer.crt
+EXPOSE 443
+EXPOSE 80
 ENTRYPOINT ["/start.sh"]
