@@ -1,12 +1,12 @@
-
+NAME=datasets
 VER=latest
 
 all: build push
 build:
-	docker build --no-cache=true -t datasets .
-	docker tag -f datasets docker.sunet.se/datasets:$(VER)
+	docker build --no-cache=true -t $(NAME):$(VERSION) .
+	docker tag -f $(NAME):$(VERSION) docker.sunet.se/$(NAME):$(VERSION)
 update:
-	docker build -t datasets .
-	docker tag -f datasets docker.sunet.se/datasets:$(VER)
+	docker build -t $(NAME):$(VERSION) .
+	docker tag -f $(NAME):$(VERSION) docker.sunet.se/$(NAME):$(VERSION)
 push:
-	docker push docker.sunet.se/datasets:$(VER)
+	docker push docker.sunet.se/$(NAME):$(VERSION)

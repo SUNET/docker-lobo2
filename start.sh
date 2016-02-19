@@ -19,7 +19,7 @@ if [ "x${REDIS_PORT}" != "x" ]; then
    REDIS_PORTNUMBER=`echo "${REDIS_PORT}" | sed 's%/%%g' | awk -F: '{ print $3 }'`
 fi
 
-cat>/config.py<<EOF
+cat>/var/run/lobo2/config.py<<EOF
 REDIS_HOST = "$REDIS_HOSTNAME"
 REDIS_PORT = $REDIS_PORTNUMBER
 BASE_URL = "https://${SP_HOSTNAME}"

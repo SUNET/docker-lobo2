@@ -1,8 +1,9 @@
 FROM ubuntu
 MAINTAINER Leif Johansson <leifj@sunet.se>
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-RUN apt-get update
-RUN apt-get install -y git-core libyaml-dev python-dev build-essential libz-dev python-virtualenv apache2 libapache2-mod-shib2 ssl-cert libapache2-mod-wsgi
+RUN apt-get -q update
+RUN apt-get -y upgrade
+RUN apt-get install -y git-core libyaml-dev python-dev build-essential libz-dev python-virtualenv apache2 libapache2-mod-shib2 ssl-cert libapache2-mod-wsgi libjpeg-dev
 RUN a2enmod rewrite
 RUN a2enmod ssl
 RUN a2enmod shib2
@@ -27,6 +28,7 @@ ENV SP_HOSTNAME datasets.sunet.se
 ENV SP_CONTACT noc@sunet.se
 ENV SP_ABOUT /about
 ENV METADATA_SIGNER md-signer.crt
+COPY /apache2.conf /etc/apache2/
 EXPOSE 443
 EXPOSE 80
 ENTRYPOINT ["/start.sh"]
