@@ -28,7 +28,7 @@ ENV SP_HOSTNAME datasets.sunet.se
 ENV SP_CONTACT noc@sunet.se
 ENV SP_ABOUT /about
 ENV METADATA_SIGNER md-signer.crt
-COPY /apache2.conf /etc/apache2/
+COPY apache2.conf /etc/apache2/
 EXPOSE 443
 EXPOSE 80
 ENTRYPOINT ["/start.sh"]
