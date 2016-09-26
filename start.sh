@@ -123,7 +123,15 @@ WSGIPythonHome /usr/lobo2
 WSGIPassAuthorization On
 EOF
 
+cat>/etc/apache2/conf-available/acme.conf<<EOF
+ProxyPass /.well-known/acme-challenge http://acme-c.sunet.se/.well-known/acme-challenge/
+ProxyPassReverse /.well-known/acme-challenge http://acme-c.sunet.se/.well-known/acme-challenge/
+EOF
+
 a2enconf lobo2
+a2enconf acme
+
+a2enmod proxy proxy_http
 
 cat>/etc/apache2/sites-available/default-ssl.conf<<EOF
 <VirtualHost *:443>
