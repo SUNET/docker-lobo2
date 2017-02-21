@@ -1,5 +1,5 @@
 NAME=datasets
-VER=latest
+VERSION=latest
 
 all: build push
 build:
