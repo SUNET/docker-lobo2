@@ -22,12 +22,12 @@ RUN /invenv.sh pip install --upgrade -r https://raw.githubusercontent.com/SUNET/
 RUN /invenv.sh pip install --upgrade git+git://github.com/SUNET/lobo2.git#egg=lobo2
 RUN rm -f /etc/apache2/sites-available/*
 RUN rm -f /etc/apache2/sites-enabled/*
-ADD md-signer.crt /etc/shibboleth/md-signer.crt
+ADD md-signer2.crt /etc/shibboleth/md-signer2.crt
 ADD attribute-map.xml /etc/shibboleth/attribute-map.xml
 ENV SP_HOSTNAME datasets.sunet.se
 ENV SP_CONTACT noc@sunet.se
 ENV SP_ABOUT /about
-ENV METADATA_SIGNER md-signer.crt
+ENV METADATA_SIGNER md-signer2.crt
 COPY apache2.conf /etc/apache2/
 EXPOSE 443
 EXPOSE 80

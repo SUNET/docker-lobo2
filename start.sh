@@ -27,9 +27,12 @@ UPLOAD_FOLDER = "/tmp"
 LOCALE = "sv_SE"
 EOF
 
-KEYDIR=/etc/ssl
-mkdir -p $KEYDIR
-export KEYDIR
+if [ -z "$KEYDIR" ]; then
+   KEYDIR=/etc/ssl
+   mkdir -p $KEYDIR
+   export KEYDIR
+fi
+
 if [ ! -f "$KEYDIR/private/shibsp.key" -o ! -f "$KEYDIR/certs/shibsp.crt" ]; then
    shib-keygen -o /tmp -h $SP_HOSTNAME 2>/dev/null
    mv /tmp/sp-key.pem "$KEYDIR/private/shibsp.key"
@@ -82,7 +85,7 @@ cat>/etc/shibboleth/shibboleth2.xml<<EOF
         <Errors supportContact="${SP_CONTACT}"
             helpLocation="${SP_ABOUT}"
             styleSheet="/shibboleth-sp/main.css"/>
-        <MetadataProvider type="XML" uri="http://md.swamid.se/md/swamid-idp-transitive.xml" backingFilePath="metadata.xml" reloadInterval="7200">
+        <MetadataProvider type="XML" uri="http://mds.swamid.se/md/swamid-idp-transitive.xml" backingFilePath="metadata.xml" reloadInterval="7200">
         </MetadataProvider>
         <AttributeExtractor type="XML" validate="true" reloadChanges="false" path="attribute-map.xml"/>
         <AttributeResolver type="Query" subjectMatch="true"/>
